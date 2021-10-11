@@ -1,7 +1,5 @@
 #include "CustomExpressionEvaluator.h"
 
-CustomExpressionEvaluator::CustomExpressionEvaluator(int n): ExpressionEvaluator(n) {}
-
 void CustomExpressionEvaluator::shuffle()
 {
 	double tmp;
@@ -16,9 +14,7 @@ void CustomExpressionEvaluator::shuffle()
 }
 
 void CustomExpressionEvaluator::shuffle(int i, int j)
-{
-	if ((int)pValue[i] == pValue[i] || (int)pValue[j] == pValue[j]) return;
-
+{	
 	double tmp;
 	tmp = pValue[i];
 	pValue[i] = pValue[j];

@@ -1,7 +1,5 @@
 #include "Divisor.h"
 
-Divisor::Divisor(int n): ExpressionEvaluator(n) {}
-
 void Divisor::shuffle()
 {
 	double tmp;
@@ -17,8 +15,6 @@ void Divisor::shuffle()
 
 void Divisor::shuffle(int i, int j)
 {
-	if ((int)pValue[i] == pValue[i] || (int)pValue[j] == pValue[j]) return;
-
 	double tmp;
 	tmp = pValue[i];
 	pValue[i] = pValue[j];

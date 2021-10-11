@@ -1,7 +1,5 @@
 #include "Multiplier.h"
 
-Multiplier::Multiplier(int n) :ExpressionEvaluator(n) {}
-
 double Multiplier::calculate()
 {
 	double result = 1;

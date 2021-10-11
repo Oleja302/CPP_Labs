@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-	ExpressionEvaluator* evaluators[3];
+	ExpressionEvaluator *evaluators[3];
 
 	evaluators[0] = new CustomExpressionEvaluator(5);
 	evaluators[0]->setOperand(0, 5);
@@ -21,14 +21,14 @@ int main()
 	evaluators[0]->setOperand(4, 12);
 
 	evaluators[1] = new Multiplier(5);
-	double mul_operands[] = { 1.5, 4, -2.5, - 8, -15 };
+	double mul_operands[] = { 1.5, 4, -2.5, -8, -15 };
 	evaluators[1]->setOperands(mul_operands, 5);
 
 	evaluators[2] = new Divisor(3);
 	double div_operands[] = { 150, -3, 10, -2.5 };
 	evaluators[2]->setOperands(div_operands, 3);
 
-	for (int i = 0; i < 3; ++i) 
+	for (int i = 0; i < 3; ++i)
 	{
 		evaluators[i]->logToFile("Lab3.log");
 		evaluators[i]->logToScreen();
@@ -37,19 +37,18 @@ int main()
 
 	cout << "\n" << endl;
 
-	for (int i = 0; i < 3; i++) 
+	for (int i = 0; i < 3; i++)
 	{
-		if (typeid(*evaluators[i]) == typeid(Divisor) || typeid(*evaluators[i]) == typeid(CustomExpressionEvaluator))
+		if (dynamic_cast<IShuffle*>(evaluators[i]) != nullptr)
 		{
-			evaluators[i]->shuffle();			
+			dynamic_cast<IShuffle*>(evaluators[i])->shuffle();
 			evaluators[i]->logToScreen();
 			cout << evaluators[i]->calculate() << std::endl;
-		}	
+		}
 	}
 
-	delete evaluators[0];
-	delete evaluators[1];
-	delete evaluators[2];
-
+	for (int i = 0; i < 3; i++)	
+		delete evaluators[i];
+	
 	return 0;
 }

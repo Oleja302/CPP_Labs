@@ -26,25 +26,7 @@ void ExpressionEvaluator::logToScreen()
 	bool flag = true;
 
 	for (int i = 0; i < countValue; i++)
-	{
-		if (i == countValue - 1)
-		{
-			if (pValue[i] < 0)
-			{
-				integer = to_string(pValue[i]);
-				integer.erase(integer.find_last_not_of('0') + 2, std::string::npos);
-				result += "(" + integer + ")";
-			}
-			else
-			{
-				integer = to_string(pValue[i]);
-				integer.erase(integer.find_last_not_of('0') + 2, std::string::npos);
-				result += integer;
-			}
-
-			break;
-		}
-
+	{		
 		if (pValue[i] < 0)
 		{
 			integer = to_string(pValue[i]);
@@ -57,6 +39,8 @@ void ExpressionEvaluator::logToScreen()
 			integer.erase(integer.find_last_not_of('0') + 2, std::string::npos);
 			result += integer;
 		}
+
+		if (i == countValue - 1) break;
 
 		if (typeid(*this) == typeid(CustomExpressionEvaluator))
 		{
@@ -87,24 +71,6 @@ void ExpressionEvaluator::logToFile(const string& filename)
 
 	for (int i = 0; i < countValue; i++)
 	{
-		if (i == countValue - 1)
-		{
-			if (pValue[i] < 0)
-			{
-				integer = to_string(pValue[i]);
-				integer.erase(integer.find_last_not_of('0') + 2, std::string::npos);
-				result += "(" + integer + ")";
-			}
-			else
-			{
-				integer = to_string(pValue[i]);
-				integer.erase(integer.find_last_not_of('0') + 2, std::string::npos);
-				result += integer;
-			}
-
-			break;
-		}
-
 		if (pValue[i] < 0)
 		{
 			integer = to_string(pValue[i]);
@@ -117,6 +83,8 @@ void ExpressionEvaluator::logToFile(const string& filename)
 			integer.erase(integer.find_last_not_of('0') + 2, std::string::npos);
 			result += integer;
 		}
+
+		if (i == countValue - 1) break;
 
 		if (typeid(*this) == typeid(CustomExpressionEvaluator))
 		{

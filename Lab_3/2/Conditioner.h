@@ -19,7 +19,7 @@ protected:
 	bool powerOnTheDevice;
 
 public:
-	Conditioner(string firm, string model, double temperature, double weight, int yearOfIssue, ConditionerMode mode, double power);
+	Conditioner(string firm, string model, double temperature, double weight, int yearOfIssue, double power);
 	virtual void control(double temperature);
 };
 

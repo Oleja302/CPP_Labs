@@ -2,12 +2,12 @@
 #include "ExpressionEvaluator.h"
 #include "IShuffle.h"
 
-class Divisor : public ExpressionEvaluator
+class Divisor : public ExpressionEvaluator, public IShuffle
 {
 public:
-	Divisor() : Divisor(20) {}
+	Divisor() : ExpressionEvaluator(20) {}
 
-	Divisor(int n);
+	Divisor(int n) : ExpressionEvaluator(n) {};
 
 	virtual void shuffle();
 

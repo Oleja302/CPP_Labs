@@ -1,27 +1,25 @@
 #include "Heater.h"
 #include <iostream>
 
+Heater::Heater(string firm, string model, double temperature, double weight, int yearOfIssue, double power) :
+	Appliances(firm, model, weight, yearOfIssue)
+{
+	this->power = power;
+	this->powerOnTheDevice = true;
+	control(temperature);
+}
 
-Heater::Heater(string firm, string model, double temperature, double weight, int yearOfIssue, HeaterMode mode, double power) :
-		Appliances(firm, model, weight, yearOfIssue)
+void Heater::control(double temperature)
+{
+	if (temperature > 45)
 	{
-		this->mode = mode;
-		this->power = power;
-		this->powerOnTheDevice = true;
-		control(temperature);		
+		cout << "Power off" << endl;
+		powerOnTheDevice = false;
 	}
 
-	void Heater::control(double temperature)
+	else
 	{
-		if (temperature > 45)
-		{
-			cout << "Power off" << endl;
-			powerOnTheDevice = false;
-		}
-
-		else
-		{
-			this->temperature = temperature;
-			mode = (HeaterMode)temperature;
-		}
+		this->temperature = temperature;
+		this->mode = (HeaterMode)temperature;
 	}
+}

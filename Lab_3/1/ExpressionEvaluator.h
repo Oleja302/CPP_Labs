@@ -5,7 +5,7 @@
 #include "ILoggable.h"
 #include "IShuffle.h"
 
-class ExpressionEvaluator : public ILoggable, public IShuffle
+class ExpressionEvaluator : public ILoggable
 {
 protected:
 	int countValue = 0;

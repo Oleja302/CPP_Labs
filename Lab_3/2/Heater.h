@@ -17,8 +17,7 @@ protected:
 	bool powerOnTheDevice;
 
 public:
-	Heater(string firm, string model, double temperature, double weight, int yearOfIssue, HeaterMode mode, double power);
-	
+	Heater(string firm, string model, double temperature, double weight, int yearOfIssue, double power);	
 	virtual void control(double temperature);
 };
 
