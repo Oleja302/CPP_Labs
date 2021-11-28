@@ -1,2 +1,5 @@
 ﻿  1.cpp
-  1.vcxproj -> D:\Programming\C++\CPP_Labs\Lab_3\Debug\1.exe
+Divisor.obj : error LNK2005: "public: virtual double __thiscall Divisor::calculate(void)" (?calculate@Divisor@@UAENXZ) уже определен в 1.obj
+Divisor.obj : error LNK2005: "public: virtual void __thiscall Divisor::shuffle(int,int)" (?shuffle@Divisor@@UAEXHH@Z) уже определен в 1.obj
+Divisor.obj : error LNK2005: "public: virtual void __thiscall Divisor::shuffle(void)" (?shuffle@Divisor@@UAEXXZ) уже определен в 1.obj
+D:\Programming\C++\CPP_Labs\Lab_3\Debug\1.exe : fatal error LNK1169: обнаружен многократно определенный символ - один или более
