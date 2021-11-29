@@ -17,7 +17,7 @@ public:
 
 class Deck
 {
-public:
+private:
 	Card* cards;
 	int countCards;
 
@@ -28,97 +28,48 @@ public:
 		this->countCards = 0;
 	}
 
+	Deck(int countCards)
+	{
+		this->cards = new Card[countCards];
+		this->countCards = countCards;
+	}
+
 	Deck(Card* cards)
 	{
 		this->cards = cards;
-		int countCards = 36;
-
-		for (int i = 0, j = 6; i < countCards; )
+		this->countCards = 36;
+		int i = 0, j = 6;
+		for (; j <= 10; j++)
 		{
-			switch (j)
-			{
-			case 10:
-
-				this->cards[i++] = Card(j, L"V\u2665");
-				this->cards[i++] = Card(j, L"V\u2660");
-				this->cards[i++] = Card(j, L"V\u2666");
-				this->cards[i++] = Card(j, L"V\u2663");
-
-				this->cards[i++] = Card(j, L"Q\u2665");
-				this->cards[i++] = Card(j, L"Q\u2660");
-				this->cards[i++] = Card(j, L"Q\u2666");
-				this->cards[i++] = Card(j, L"Q\u2663");
-
-				this->cards[i++] = Card(j, L"K\u2665");
-				this->cards[i++] = Card(j, L"K\u2660");
-				this->cards[i++] = Card(j, L"K\u2666");
-				this->cards[i++] = Card(j, L"K\u2663");
-
-				j++;
-				break;
-
-			case 11:
-
-				this->cards[i++] = Card(j, L"\u2665");
-				this->cards[i++] = Card(j, L"\u2660");
-				this->cards[i++] = Card(j, L"\u2666");
-				this->cards[i++] = Card(j, L"\u2663");
-
-				break;
-
-			default:
-				this->cards[i++] = Card(j, to_wstring(j) + L"\u2665");
-				this->cards[i++] = Card(j, to_wstring(j) + L"\u2660");
-				this->cards[i++] = Card(j, to_wstring(j) + L"\u2666");
-				this->cards[i++] = Card(j, to_wstring(j) + L"\u2663");
-
-				j++;
-				break;
-			}
+			this->cards[i++] = Card(j, to_wstring(j) + L"\u2665");
+			this->cards[i++] = Card(j, to_wstring(j) + L"\u2660");
+			this->cards[i++] = Card(j, to_wstring(j) + L"\u2666");
+			this->cards[i++] = Card(j, to_wstring(j) + L"\u2663");
 		}
 
-		Mixing(countCards);
+		this->cards[i++] = Card(j, L"V\u2665");
+		this->cards[i++] = Card(j, L"V\u2660");
+		this->cards[i++] = Card(j, L"V\u2666");
+		this->cards[i++] = Card(j, L"V\u2663");
+		j++;
+		this->cards[i++] = Card(j, L"Q\u2665");
+		this->cards[i++] = Card(j, L"Q\u2660");
+		this->cards[i++] = Card(j, L"Q\u2666");
+		this->cards[i++] = Card(j, L"Q\u2663");
+		j++;
+		this->cards[i++] = Card(j, L"K\u2665");
+		this->cards[i++] = Card(j, L"K\u2660");
+		this->cards[i++] = Card(j, L"K\u2666");
+		this->cards[i++] = Card(j, L"K\u2663");
+		j++;
+		this->cards[i++] = Card(j, L"\u2665");
+		this->cards[i++] = Card(j, L"\u2660");
+		this->cards[i++] = Card(j, L"\u2666");
+		this->cards[i++] = Card(j, L"\u2663");
 	}
-
-	~Deck()
-	{
+	~Deck() {
 		delete[] cards;
 	}
-
-	void AddCard(Card card)
-	{
-		countCards++;
-
-		Card *newCards = new Card[countCards];
-
-		for (int i = 0; i < countCards - 1; i++)		
-			newCards[i] = this->cards[i];
-		
-		delete[] this->cards;
-
-		newCards[countCards - 1] = card;
-
-		this->cards = newCards;
-		newCards = nullptr;
-	}
-
-	Card TakeCard()
-	{
-		countCards++;
-
-		Card* newCards = new Card[countCards];
-
-		for (int i = 0; i < countCards - 1; i++)
-			newCards[i] = this->cards[i];
-
-		delete[] this->cards;
-
-		newCards[countCards - 1] = card;
-
-		this->cards = newCards;
-		newCards = nullptr;
-	}
-
 	void Print()
 	{
 		for (int i = 0; i < 36; i++)
@@ -127,32 +78,58 @@ public:
 		}
 	}
 
-	void Mixing(int countCards)
+	Card* GetCards() { return this->cards; }
+
+	int GetCountCards() { return this->countCards; }
+	void ChangeCountCards(int value) { this->countCards += value; }
+	Card GetCard(int index) { return cards[index]; }
+	void SetCard(int index, Card tmp) { cards[index] = tmp; }
+
+	friend class Dealer;
+};
+
+class Player
+{
+protected:
+	Deck hand;
+};
+
+class Dealer : public Player
+{
+public:
+	Card TakeAddCard(Deck* gameDeck, Deck* playerCard)
+	{
+		Card tmp = gameDeck->cards[gameDeck->countCards - 1];
+		Deck *tmpDeck = new Deck(gameDeck->countCards - 1);
+
+		for (int i = 0; i < gameDeck->countCards - 1; i++)
+			tmpDeck->cards[i] = gameDeck->cards[i];
+
+		delete gameDeck;
+		gameDeck = nullptr;
+
+		gameDeck = tmpDeck;
+		delete tmpDeck;
+		tmpDeck = nullptr;
+	}
+
+	void Mixing(Deck* Cards)
 	{
 		srand(time(NULL));
-		int indexCard1, indexCard2;
+		int indexCard1, indexCard2, size = Cards->countCards;
+
 		Card tmp;
-		for (int i = 0; i < countCards; i++)
+		for (int i = 0; i < size; i++)
 		{
 			indexCard1 = rand() % 36;
 			indexCard2 = rand() % 36;
 
 			if (indexCard1 == indexCard2) continue;
-			tmp = this->cards[indexCard1];
-			this->cards[indexCard1] = this->cards[indexCard2];
-			this->cards[indexCard2] = tmp;
+			tmp = Cards->cards[indexCard1];
+			Cards->SetCard(indexCard1, Cards->cards[indexCard2]);
+			Cards->SetCard(indexCard2, tmp);
 		}
 	}
-};
-
-class Player
-{
-	Deck hand;
-};
-
-class Dealer : Player
-{
-
 };
 
 class Game
@@ -172,6 +149,8 @@ int main()
 
 	Card* cards = new Card[36];
 	Deck deck(cards);
+	Dealer d;
+	d.Mixing(&deck);
 
 	deck.Print();
 }
