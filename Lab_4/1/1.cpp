@@ -17,7 +17,14 @@ public:
 	void SetSurface(wstring surface) { this->surface = surface; }
 	int GetPower() { return this->power; }
 	wstring GetSurface() { return this->surface; }
+
+	friend void operator << (wostream& out, const Card& card);
 };
+
+void operator << (wostream& out, const Card& card)
+{
+	out << card.surface;
+}
 
 class Deck
 {
@@ -82,7 +89,10 @@ public:
 	void Print(int countCards)
 	{
 		for (int i = 0; i < countCards; i++)
-			wcout << this->cards[i].GetSurface() << " ";
+		{
+			wcout << this->cards[i];
+			wcout << L" ";
+		}
 	}
 
 	Card* GetCard(int index) { return &cards[index]; }
@@ -331,22 +341,51 @@ public:
 					wcout << endl;
 
 					wcout << L"Первая ставка: ";
-					if (dealer->CheckBlackJack(&dealer->GetPlayerDeck(player)[0]))
-						wcout << L"Блэкджек!" << endl;
-					else if ((dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) <= 21) && (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) > dealer->GetPowerDeck(dealer->GetDeck())))
-						wcout << L"Вы выиграли!" << endl;
-					else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) == dealer->GetPowerDeck(dealer->GetDeck()))
-						wcout << L"Ничья!" << endl;
-					else wcout << L"Вы проиграли!" << endl;
+
+					try
+					{
+						if (dealer->CheckBlackJack(&dealer->GetPlayerDeck(player)[0]))
+							wcout << L"Блэкджек!" << endl;
+
+						else if ((dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) <= 21) && (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) > dealer->GetPowerDeck(dealer->GetDeck())))
+							wcout << L"Вы выиграли!" << endl;
+
+						else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) == dealer->GetPowerDeck(dealer->GetDeck()))
+							wcout << L"Ничья!" << endl;
+
+						else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) > 21)
+							throw L"Перебор!";
+
+						else wcout << L"Вы проиграли!" << endl;
+					}
+					catch (const char* exeption)
+					{
+						wcout << exeption << endl;
+					}
 
 					wcout << L"Вторая ставка: ";
-					if (dealer->CheckBlackJack(&dealer->GetPlayerDeck(player)[1]))
-						wcout << L"Блэкджек!" << endl;
-					else if ((dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) <= 21) && (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) > dealer->GetPowerDeck(dealer->GetDeck())))
-						wcout << L"Вы выиграли!" << endl;
-					else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) == dealer->GetPowerDeck(dealer->GetDeck()))
-						wcout << L"Ничья!" << endl;
-					else wcout << L"Вы проиграли!" << endl;
+
+					try
+					{
+						if (dealer->CheckBlackJack(&dealer->GetPlayerDeck(player)[1]))
+							wcout << L"Блэкджек!" << endl;
+
+						else if ((dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) <= 21) && (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) > dealer->GetPowerDeck(dealer->GetDeck())))
+							wcout << L"Вы выиграли!" << endl;
+
+						else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) == dealer->GetPowerDeck(dealer->GetDeck()))
+							wcout << L"Ничья!" << endl;
+
+						else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[1]) > 21)
+							throw L"Перебор!";
+
+						else wcout << L"Вы проиграли!" << endl;
+					}
+
+					catch (const wchar_t* exeption)
+					{
+						wcout << exeption << endl;
+					}
 				}
 
 				else
@@ -360,13 +399,26 @@ public:
 					wcout << endl;
 					wcout << endl;
 
-					if (dealer->CheckBlackJack(&dealer->GetPlayerDeck(player)[0]))
-						wcout << L"Блэкджек!" << endl;
-					else if ((dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) <= 21) && (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) > dealer->GetPowerDeck(dealer->GetDeck())))
-						wcout << L"Вы выиграли!" << endl;
-					else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) == dealer->GetPowerDeck(dealer->GetDeck()))
-						wcout << L"Ничья!" << endl;
-					else wcout << L"Вы проиграли!" << endl;
+					try
+					{
+						if (dealer->CheckBlackJack(&dealer->GetPlayerDeck(player)[0]))
+							wcout << L"Блэкджек!" << endl;
+
+						else if ((dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) <= 21) && (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) > dealer->GetPowerDeck(dealer->GetDeck())))
+							wcout << L"Вы выиграли!" << endl;
+
+						else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) == dealer->GetPowerDeck(dealer->GetDeck()))
+							wcout << L"Ничья!" << endl;
+
+						else if (dealer->GetPowerDeck(&dealer->GetPlayerDeck(player)[0]) > 21)
+							throw L"Перебор!";
+
+						else wcout << L"Вы проиграли!" << endl;
+					}
+					catch (const wchar_t* exeption)
+					{
+						wcout << exeption << endl;
+					}
 				}
 				break;
 
