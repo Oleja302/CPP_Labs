@@ -210,6 +210,7 @@ int main()
 
 	delete[] cards1;
 	delete[] cards2;
+
 	delete deck1;
 	delete deck2;
 }

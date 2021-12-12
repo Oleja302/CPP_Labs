@@ -39,6 +39,11 @@ public:
 		this->countCards = 0;
 	}
 
+	~Deck()
+	{
+		if (this->countCards != 36) delete[] this->cards;
+	}
+
 	Deck(int countCards)
 	{
 		this->cards = new Card[countCards];
@@ -82,10 +87,6 @@ public:
 		}
 	}
 
-	~Deck() {
-		delete[] cards;
-	}
-
 	void Print(int countCards)
 	{
 		for (int i = 0; i < countCards; i++)
@@ -105,14 +106,16 @@ public:
 	}
 	int GetCountCard() { return this->countCards; }
 	void SetCard(int index, Card tmp) { this->cards[index] = tmp; }
-	void RemoveCard(int index)
+	void RemoveLastCard()
 	{
 		Deck* tmpDeck = new Deck(this->countCards - 1);
 
-		for (int i = 0; i < this->countCards - 1; i++)
+		for (int i = 0; i < tmpDeck->countCards; i++)
 			tmpDeck->cards[i] = this->cards[i];
 
-		delete[] this->cards;
+		if (this->countCards == 36) this->cards = nullptr;
+		else delete[] this->cards;
+
 		this->cards = tmpDeck->cards;
 		this->countCards--;
 		tmpDeck = nullptr;
@@ -220,13 +223,13 @@ public:
 		Card* tmpCard = playerDeck[0].GetCard(1);
 		playerDeck[1].AddCard(tmpCard);
 		playerDeck[0].power -= tmpCard->GetPower();
-		playerDeck[0].RemoveCard(1);
+		playerDeck[0].RemoveLastCard();
 
 		playerDeck[0].AddCard(gameDeck->GetCard(gameDeck->GetCountCard() - 1));
-		gameDeck->RemoveCard(gameDeck->GetCountCard() - 1);
+		gameDeck->RemoveLastCard();
 
 		playerDeck[1].AddCard(gameDeck->GetCard(gameDeck->GetCountCard() - 1));
-		gameDeck->RemoveCard(gameDeck->GetCountCard() - 1);
+		gameDeck->RemoveLastCard();
 	}
 
 	HandDeck* GetPlayerDeck(Player* player) { return player->hand; }
@@ -236,6 +239,7 @@ public:
 
 class Game
 {
+private:
 	Deck** gameDeck;
 	Player* player;
 	Dealer* dealer;
@@ -252,15 +256,26 @@ public:
 	{
 		this->gameDeck = new Deck * [4];
 
-		dealer->Mixing(deck1);
-		dealer->Mixing(deck2);
-		dealer->Mixing(deck3);
-		dealer->Mixing(deck4);
+		this->gameDeck[0] = new Deck(36);
+		for (int i = 0; i < 36; i++)
+			gameDeck[0]->SetCard(i, *deck1->GetCard(i));
 
-		this->gameDeck[0] = deck1;
-		this->gameDeck[1] = deck2;
-		this->gameDeck[2] = deck3;
-		this->gameDeck[3] = deck4;
+		this->gameDeck[1] = new Deck(36);
+		for (int i = 0; i < 36; i++)
+			gameDeck[1]->SetCard(i, *deck2->GetCard(i));
+
+		this->gameDeck[2] = new Deck(36);
+		for (int i = 0; i < 36; i++)
+			gameDeck[2]->SetCard(i, *deck3->GetCard(i));
+
+		this->gameDeck[3] = new Deck(36);
+		for (int i = 0; i < 36; i++)
+			gameDeck[3]->SetCard(i, *deck4->GetCard(i));
+
+		dealer->Mixing(gameDeck[0]);
+		dealer->Mixing(gameDeck[1]);
+		dealer->Mixing(gameDeck[2]);
+		dealer->Mixing(gameDeck[3]);
 
 		this->player = player;
 		this->dealer = dealer;
@@ -270,19 +285,19 @@ public:
 	{
 		Deck* deck = this->gameDeck[rand() % 4];
 		this->dealer->GetPlayerDeck(this->player)[0].AddCard(deck->GetCard(deck->GetCountCard() - 1));
-		deck->RemoveCard(deck->GetCountCard() - 1);
+		deck->RemoveLastCard();
 
 		deck = this->gameDeck[rand() % 4];
 		this->dealer->GetPlayerDeck(this->player)[0].AddCard(deck->GetCard(deck->GetCountCard() - 1));
-		deck->RemoveCard(deck->GetCountCard() - 1);
+		deck->RemoveLastCard();
 
 		deck = this->gameDeck[rand() % 4];
 		this->dealer->GetDeck()->AddCard(deck->GetCard(deck->GetCountCard() - 1));
-		deck->RemoveCard(deck->GetCountCard() - 1);
+		deck->RemoveLastCard();
 
 		deck = this->gameDeck[rand() % 4];
 		this->dealer->GetDeck()->AddCard(deck->GetCard(deck->GetCountCard() - 1));
-		deck->RemoveCard(deck->GetCountCard() - 1);
+		deck->RemoveLastCard();
 
 		int answer = 0;
 		bool split = dealer->CheckSplit(player);
@@ -358,7 +373,8 @@ public:
 
 						else wcout << L"Вы проиграли!" << endl;
 					}
-					catch (const char* exeption)
+
+					catch (const wchar_t* exeption)
 					{
 						wcout << exeption << endl;
 					}
@@ -420,6 +436,7 @@ public:
 						wcout << exeption << endl;
 					}
 				}
+
 				break;
 
 			case (int)Сhoice::More:
@@ -427,7 +444,7 @@ public:
 				{
 					deck = this->gameDeck[rand() % 4];
 					this->dealer->GetPlayerDeck(this->player)[0].AddCard(deck->GetCard(deck->GetCountCard() - 1));
-					deck->RemoveCard(deck->GetCountCard() - 1);
+					deck->RemoveLastCard();
 				}
 
 				else
@@ -439,7 +456,7 @@ public:
 
 					deck = this->gameDeck[rand() % 4];
 					this->dealer->GetPlayerDeck(this->player)[numberHand].AddCard(deck->GetCard(deck->GetCountCard() - 1));
-					deck->RemoveCard(deck->GetCountCard() - 1);
+					deck->RemoveLastCard();
 				}
 
 				split = false;
@@ -463,16 +480,34 @@ int main()
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	srand((time(0)));
 
-	Deck* deck1 = new Deck(new Card[36]);
-	Deck* deck2 = new Deck(new Card[36]);
-	Deck* deck3 = new Deck(new Card[36]);
-	Deck* deck4 = new Deck(new Card[36]);
+	Card* cards1 = new Card[36];
+	Card* cards2 = new Card[36];
+	Card* cards3 = new Card[36];
+	Card* cards4 = new Card[36];
+
+	Deck* deck1 = new Deck(cards1);
+	Deck* deck2 = new Deck(cards2);
+	Deck* deck3 = new Deck(cards3);
+	Deck* deck4 = new Deck(cards4);
 
 	Player* player = new Player();
 	Dealer* dealer = new Dealer();
 
 	Game game(deck1, deck2, deck3, deck4, player, dealer);
 	game.Run();
+
+	delete[] cards1;
+	delete[] cards2;
+	delete[] cards3;
+	delete[] cards4;
+
+	delete deck1;
+	delete deck2;
+	delete deck3;
+	delete deck4;
+
+	delete player;
+	delete dealer;
 
 	return 0;
 }
