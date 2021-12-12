@@ -140,6 +140,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2.cpp" />
+    <ClCompile Include="AdapterClass.cpp" />
+    <ClCompile Include="AdapterObject.cpp" />
+    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="Deck.cpp" />
+    <ClCompile Include="IFormattable.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AdapterClass.h" />
+    <ClInclude Include="AdapterObject.h" />
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="Deck.h" />
+    <ClInclude Include="IFormattable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
